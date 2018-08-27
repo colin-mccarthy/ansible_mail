@@ -1,0 +1,26 @@
+---
+
+
+- name: yum update for all hosts
+  hosts: linux servers
+  become: yes
+  become_method: su
+
+
+  tasks:
+    - name: yum update
+      yum: >
+        update_cache=yes
+        name=*
+        state=latest
+        update_cache=yes
+
+    - name: send mail
+      mail:
+       host: xxx.xxx.xxx.xxx
+       port: xxxxxxxx
+       sender: colin@thenetwork.engineer
+       to: Colin McCarthy <colin@thenetwork.engineer>
+       subject: Report for { { ansible_hostname } }
+       body: 'Device { { ansible_hostname } } has been updated'
+      delegate_to: localhost
